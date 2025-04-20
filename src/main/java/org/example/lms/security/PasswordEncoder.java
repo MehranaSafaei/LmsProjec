@@ -1,4 +1,4 @@
 package org.example.lms.security;
 
-public class PsswordEncoder {
+public class PasswordEncoder {
 }

@@ -18,6 +18,7 @@ import java.util.Collections;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
+@Table(name = "USERS")
 public class User implements UserDetails {
 
     @SequenceGenerator(
@@ -27,7 +28,7 @@ public class User implements UserDetails {
     )
     @Id
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
+            strategy = GenerationType.AUTO,
             generator = "student_sequence"
     )
     private Long id;

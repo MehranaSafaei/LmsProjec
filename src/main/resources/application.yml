@@ -8,9 +8,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/registration
     username: postgres
     password: 1234
-    hikari:
-      maximum-pool-size: 10
-
   jpa:
     hibernate:
       ddl-auto: create-drop

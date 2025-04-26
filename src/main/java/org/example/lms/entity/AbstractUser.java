@@ -35,7 +35,7 @@ public class AbstractUser implements UserDetails {
             generator = "student_sequence"
     )
     private Long id;
-    private String name;
+//    private String name;
     private String username;
     private String password;
     private String email;

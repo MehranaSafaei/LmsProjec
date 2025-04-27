@@ -44,7 +44,7 @@ public class WebSecurityConfig {
 //                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
                         //Delete JSESSIONID cookie on logout to invalidate the session on client side
                         .deleteCookies("JSESSIONID")

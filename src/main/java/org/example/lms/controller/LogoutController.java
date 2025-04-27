@@ -3,6 +3,7 @@ package org.example.lms.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,18 +20,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping(path = "/api/auth/lms")
 public class LogoutController {
 
-    private final SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
-        logoutHandler.logout(request, response, authentication);
-
-        request.getSession().removeAttribute("SPRING_SECURITY_CONTEXT");
-        request.getSession().invalidate();
+    public ResponseEntity<String> logout(HttpServletRequest request) {
         SecurityContextHolder.clearContext();
-        return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
-
-
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return new ResponseEntity<>("User logged out successfully", HttpStatus.OK);
     }
 //    @GetMapping("/logout")
 //    public String logout(RedirectAttributes redirectAttributes) {

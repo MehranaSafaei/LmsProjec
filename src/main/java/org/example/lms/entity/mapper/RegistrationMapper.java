@@ -13,9 +13,9 @@ public class RegistrationMapper {
         user.setPassword(registrationRequest.getPassword());
         return user;
     }
-
-    public LoginRequest convertEntityToDto(User user) {
-        return new LoginRequest(user.getPassword(), user.getEmail());
-    }
+//
+//    public LoginRequest convertEntityToDto(User user) {
+//        return new LoginRequest(user.getPassword(), user.getEmail());
+//    }
 
 }

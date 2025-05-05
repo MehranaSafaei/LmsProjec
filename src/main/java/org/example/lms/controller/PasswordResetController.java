@@ -1,6 +1,6 @@
 package org.example.lms.controller;
 
-import org.example.lms.service.PasswordResetService;
+import org.example.lms.serviceImp.PasswordResetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

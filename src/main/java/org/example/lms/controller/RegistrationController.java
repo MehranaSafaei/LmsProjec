@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.lms.entity.dto.RegisterRequest;
 import org.example.lms.exception.EmailAlreadyTakenException;
 import org.example.lms.exception.MobileAlreadyTakenException;
-import org.example.lms.service.UserService;
+import org.example.lms.serviceImp.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RegistrationController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImp userService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request, HttpSession session) {

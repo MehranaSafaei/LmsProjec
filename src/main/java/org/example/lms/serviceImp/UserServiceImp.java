@@ -1,13 +1,20 @@
-package org.example.lms.service;
+package org.example.lms.serviceImp;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.lms.entity.Role;
 import org.example.lms.entity.User;
 import org.example.lms.entity.dto.RegisterRequest;
 import org.example.lms.exception.EmailAlreadyTakenException;
 import org.example.lms.exception.MobileAlreadyTakenException;
 import org.example.lms.exception.PasswordMismatchException;
+import org.example.lms.repository.RoleRepository;
 import org.example.lms.repository.UserRepository;
+import org.example.lms.serviceImp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,13 +25,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
+public class UserServiceImp implements UserDetailsService, UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    @Autowired
+    private final RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -81,6 +94,38 @@ public class UserService implements UserDetailsService {
 
 
     public Optional<User> findByUsername(String username) {
+        return Optional.ofNullable(userRepository.findByUsername(username));
+    }
+
+    @Override
+    public User saveUser(User user) {
+        log.info("saving new user {} to the database", user.getName());
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Role saveRole(Role role) {
+        log.info("saving new role {} to the database", role.getName() );
+        return roleRepository.save(role);
+    }
+
+    @Override
+    public void addRoleToUser(String username, String roleName) {
+        log.info("adding role {} to user {}", username, roleName );
+        User user = userRepository.findByUsername(username);
+        Role role = roleRepository.findByName(roleName);
+        user.getRoles().add(role);
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        log.info("fetching user {}", username);
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public List<User> getUsers() {
+        log.info("fetching all users");
+        return userRepository.findAll();
     }
 }

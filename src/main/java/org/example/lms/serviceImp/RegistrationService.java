@@ -1,13 +1,4 @@
-package org.example.lms.service;
-
-import lombok.AllArgsConstructor;
-import org.example.lms.entity.User;
-import org.example.lms.entity.dto.LoginRequest;
-import org.example.lms.entity.mapper.RegistrationMapper;
-import org.example.lms.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
+package org.example.lms.serviceImp;
 
 //@Service
 //@AllArgsConstructor

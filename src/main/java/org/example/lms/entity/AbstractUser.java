@@ -11,8 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,7 +35,7 @@ public class AbstractUser implements UserDetails {
             generator = "student_sequence"
     )
     private Long id;
-//    private String name;
+    private String name;
     private String username;
     private String password;
     private String email;
@@ -53,12 +53,17 @@ public class AbstractUser implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return roles.stream()
+//                .flatMap(role -> role.getPermissions().stream())
+//                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+//                .collect(Collectors.toSet());
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .flatMap(role -> role.getPermissions().stream())
-                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-                .collect(Collectors.toSet());
+        return List.of();
     }
 
     @Override
@@ -91,4 +96,9 @@ public class AbstractUser implements UserDetails {
         return enabled;
     }
 
+    public AbstractUser(String name, String username, String password) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+    }
 }

@@ -5,8 +5,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.example.lms.entity.User;
 import org.example.lms.entity.dto.LoginRequest;
-import org.example.lms.security.Jwt;
-import org.example.lms.service.UserService;
+import org.example.lms.security.JwtTokenProvider;
+import org.example.lms.serviceImp.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,6 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/api/auth/lms")
@@ -33,9 +31,9 @@ public class LoginController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UserService userService;
+    private UserServiceImp userService;
     @Autowired
-    private Jwt jwtUtil;
+    private JwtTokenProvider jwtUtil;
 
 
 //    @GetMapping("/login")
@@ -79,17 +77,13 @@ public class LoginController {
     }
 
 
-    @GetMapping("/user-info")
-    public String userInfoPage() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Optional<User> user = userService.findByUsername(username);
-        return user.toString();
-    }
-
-
-
-
+//    @GetMapping("/user-info")
+//    public String userInfoPage() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = authentication.getName();
+//        Optional<User> user = userService.findByUsername(username);
+//        return user.toString();
+//    }
 //    @GetMapping
 //    public String loginPage(HttpSession session) {
 //

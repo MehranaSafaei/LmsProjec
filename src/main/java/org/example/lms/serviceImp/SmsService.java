@@ -1,4 +1,4 @@
-package org.example.lms.service;
+package org.example.lms.serviceImp;
 
 import org.springframework.stereotype.Service;
 

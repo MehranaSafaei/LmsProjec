@@ -36,11 +36,11 @@ public class UserController {
         return ResponseEntity.created(uri).body(userServiceImp.saveRole(role));
     }
 
-    @PostMapping("/role/addToUser")
-    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserFrom from) {
-        userServiceImp.addRoleToUser(from.getUsername(), from.getRoleName());
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/role/addToUser")
+//    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserFrom from) {
+//        userServiceImp.addRoleToUser(from.getUsername(), from.getRoleName());
+//        return ResponseEntity.ok().build();
+//    }
 
 
 

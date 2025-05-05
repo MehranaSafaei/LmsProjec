@@ -3,7 +3,6 @@ package org.example.lms.serviceImp;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.lms.entity.Role;
@@ -94,7 +93,7 @@ public class UserServiceImp implements UserDetailsService, UserService {
 
 
     public Optional<User> findByUsername(String username) {
-        return Optional.ofNullable(userRepository.findByUsername(username));
+        return userRepository.findByUsername(username);
     }
 
     @Override
@@ -109,16 +108,16 @@ public class UserServiceImp implements UserDetailsService, UserService {
         return roleRepository.save(role);
     }
 
-    @Override
-    public void addRoleToUser(String username, String roleName) {
-        log.info("adding role {} to user {}", username, roleName );
-        User user = userRepository.findByUsername(username);
-        Role role = roleRepository.findByName(roleName);
-        user.getRoles().add(role);
-    }
+//    @Override
+//    public void addRoleToUser(String username, String roleName) {
+//        log.info("adding role {} to user {}", username, roleName );
+//        Optional<User> user = userRepository.findByUsername(username);
+//        Optional<Role> role = roleRepository.findByName(roleName);
+//        user.get().getRoles().add(role);
+//    }
 
     @Override
-    public User getUserByUsername(String username) {
+    public Optional<User> getUserByUsername(String username) {
         log.info("fetching user {}", username);
         return userRepository.findByUsername(username);
     }

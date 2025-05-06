@@ -57,7 +57,7 @@ public class LoginController {
             HttpSession session = request.getSession();
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
             User user = (User) authenticationResponse.getPrincipal();
-            String token = jwtUtil.generateToken(user);
+            String token = jwtUtil.generateToken(user).toString();
             response.put("token", token);
 //            response.put("message", "User signed-in successfully!");
             return ResponseEntity.ok(response);

@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .input-error {
+            border-color: #f87171;
+        }
+        .error-message {
+            color: #f87171;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 min-h-screen">
+<!-- Navigation -->
+<nav class="gradient-bg text-white shadow-lg">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-calendar-alt text-2xl"></i>
+            <span class="text-xl font-bold">LeaveTrack</span>
+        </div>
+        <div class="hidden md:flex space-x-6">
+            <a href="#" onclick="showPage('home')" class="nav-link hover:text-gray-200 transition-all">Home</a>
+            <a href="#" onclick="showPage('about')" class="nav-link hover:text-gray-200 transition-all">About</a>
+            <a href="#" onclick="showPage('login')" id="login-nav" class="nav-link hover:text-gray-200 transition-all">Login</a>
+            <a href="#" onclick="showPage('register')" id="register-nav" class="nav-link hover:text-gray-200 transition-all">Register</a>
+            <a href="#" onclick="logout()" id="logout-nav" class="nav-link hover:text-gray-200 transition-all hidden">Logout</a>
+            <a href="#" onclick="showPage('dashboard')" id="dashboard-nav" class="nav-link hover:text-gray-200 transition-all hidden">Dashboard</a>
+        </div>
+        <button class="md:hidden text-white focus:outline-none" id="mobile-menu-button">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
+    </div>
+    <!-- Mobile menu -->
+    <div class="md:hidden hidden bg-indigo-800" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="#" onclick="showPage('home')" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700">Home</a>
+            <a href="#" onclick="showPage('about')" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700">About</a>
+            <a href="#" onclick="showPage('login')" id="login-nav-mobile" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700">Login</a>
+            <a href="#" onclick="showPage('register')" id="register-nav-mobile" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700">Register</a>
+            <a href="#" onclick="logout()" id="logout-nav-mobile" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700 hidden">Logout</a>
+            <a href="#" onclick="showPage('dashboard')" id="dashboard-nav-mobile" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700 hidden">Dashboard</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Home Page -->
+<div id="home" class="page active">
+    <div class="container mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Streamline Your Leave Management</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Efficiently manage employee leave requests, approvals, and tracking with our intuitive system.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all">
+                <div class="text-indigo-600 mb-4">
+                    <i class="fas fa-clock text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Time Tracking</h3>
+                <p class="text-gray-600">Easily track employee leave balances and usage in real-time.</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all">
+                <div class="text-indigo-600 mb-4">
+                    <i class="fas fa-check-circle text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Easy Approvals</h3>
+                <p class="text-gray-600">Streamline the approval process with automated workflows.</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all">
+                <div class="text-indigo-600 mb-4">
+                    <i class="fas fa-chart-pie text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Detailed Reports</h3>
+                <p class="text-gray-600">Generate comprehensive reports for better workforce planning.</p>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button onclick="showPage('register')" class="gradient-bg text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition-all shadow-lg">
+                Get Started Now
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Login Page -->
+<div id="login" class="page">
+    <div class="container mx-auto px-4 py-12 max-w-md">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="gradient-bg py-4 px-6">
+                <h2 class="text-2xl font-bold text-white">Login to Your Account</h2>
+            </div>
+            <div class="p-6">
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label for="loginEmail" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                        <input type="email" id="loginEmail" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="your@email.com" required>
+                        <div id="loginEmailError" class="error-message hidden">Please enter a valid email address</div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="loginPassword" class="block text-gray-700 font-medium mb-2">Password</label>
+                        <input type="password" id="loginPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="••••••••" required>
+                        <div id="loginPasswordError" class="error-message hidden">Password must be at least 6 characters</div>
+                    </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="rememberMe" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                        </div>
+                        <a href="#" class="text-sm text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-lg font-semibold hover:opacity-90 transition-all">
+                        Login
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600">Don't have an account? <a href="#" onclick="showPage('register')" class="text-indigo-600 hover:text-indigo-500 font-medium">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Page -->
+<div id="register" class="page">
+    <div class="container mx-auto px-4 py-12 max-w-md">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="gradient-bg py-4 px-6">
+                <h2 class="text-2xl font-bold text-white">Create Your Account</h2>
+            </div>
+            <div class="p-6">
+                <form id="registerForm">
+                    <div class="mb-4">
+                        <label for="registerName" class="block text-gray-700 font-medium mb-2">Full Name</label>
+                        <input type="text" id="registerName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="John Doe" required>
+                        <div id="registerNameError" class="error-message hidden">Please enter your full name</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="registerEmail" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                        <input type="email" id="registerEmail" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="your@email.com" required>
+                        <div id="registerEmailError" class="error-message hidden">Please enter a valid email address</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="registerPassword" class="block text-gray-700 font-medium mb-2">Password</label>
+                        <input type="password" id="registerPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="••••••••" required>
+                        <div id="registerPasswordError" class="error-message hidden">Password must be at least 6 characters</div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="registerConfirmPassword" class="block text-gray-700 font-medium mb-2">Confirm Password</label>
+                        <input type="password" id="registerConfirmPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="••••••••" required>
+                        <div id="registerConfirmPasswordError" class="error-message hidden">Passwords do not match</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="registerRole" class="block text-gray-700 font-medium mb-2">Role</label>
+                        <select id="registerRole" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            <option value="">Select your role</option>
+                            <option value="employee">Employee</option>
+                            <option value="manager">Manager</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                        <div id="registerRoleError" class="error-message hidden">Please select your role</div>
+                    </div>
+                    <div class="flex items-center mb-6">
+                        <input type="checkbox" id="acceptTerms" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" required>
+                        <label for="acceptTerms" class="ml-2 block text-sm text-gray-700">I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms and Conditions</a></label>
+                    </div>
+                    <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-lg font-semibold hover:opacity-90 transition-all">
+                        Register
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600">Already have an account? <a href="#" onclick="showPage('login')" class="text-indigo-600 hover:text-indigo-500 font-medium">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About Page -->
+<div id="about" class="page">
+    <div class="container mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">About LeaveTrack</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Our mission is to simplify leave management for organizations of all sizes.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 mb-12">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Our Story</h2>
+                <p class="text-gray-600 mb-4">Founded in 2023, LeaveTrack was born out of a need to modernize the way companies handle employee leave management. We noticed that many organizations were still using outdated spreadsheets or paper-based systems, leading to inefficiencies and errors.</p>
+                <p class="text-gray-600">Our team of HR professionals and software developers came together to create a solution that would save time, reduce administrative burden, and provide better visibility into workforce planning.</p>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Team working" class="rounded-lg shadow-lg w-full h-auto">
+            </div>
+        </div>
+
+        <div class="bg-gray-100 rounded-lg p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Key Features</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="text-indigo-600 mb-3">
+                        <i class="fas fa-user-shield text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Role-Based Access</h3>
+                    <p class="text-gray-600">Different access levels for employees, managers, and administrators ensure proper control and security.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="text-indigo-600 mb-3">
+                        <i class="fas fa-bell text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Automated Notifications</h3>
+                    <p class="text-gray-600">Real-time alerts for leave requests, approvals, and reminders keep everyone informed.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="text-indigo-600 mb-3">
+                        <i class="fas fa-mobile-alt text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Mobile Friendly</h3>
+                    <p class="text-gray-600">Access the system from any device, anywhere, making it convenient for both office and remote workers.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Ready to Get Started?</h2>
+            <button onclick="showPage('register')" class="gradient-bg text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition-all shadow-lg">
+                Sign Up Now
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Page -->
+<div id="dashboard" class="page">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">Leave Management Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <div class="bg-white px-4 py-2 rounded-lg shadow-sm flex items-center">
+                    <i class="fas fa-user-circle text-indigo-600 mr-2"></i>
+                    <span id="dashboard-username" class="font-medium">John Doe</span>
+                </div>
+                <button onclick="logout()" class="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 transition-all">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 font-medium">Available Leave</p>
+                        <h3 class="text-2xl font-bold mt-1">18 <span class="text-sm font-normal text-gray-500">days</span></h3>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <i class="fas fa-check-circle text-green-600"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 font-medium">Pending Requests</p>
+                        <h3 class="text-2xl font-bold mt-1">2 <span class="text-sm font-normal text-gray-500">requests</span></h3>
+                    </div>
+                    <div class="bg-yellow-100 p-3 rounded-full">
+                        <i class="fas fa-clock text-yellow-600"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 font-medium">Approved Leave</p>
+                        <h3 class="text-2xl font-bold mt-1">7 <span class="text-sm font-normal text-gray-500">days</span></h3>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-calendar-check text-blue-600"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 font-medium">Rejected Requests</p>
+                        <h3 class="text-2xl font-bold mt-1">1 <span class="text-sm font-normal text-gray-500">request</span></h3>
+                    </div>
+                    <div class="bg-red-100 p-3 rounded-full">
+                        <i class="fas fa-times-circle text-red-600"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Request Leave</h2>
+                    <button onclick="showLeaveRequestModal()" class="gradient-bg text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all">
+                        <i class="fas fa-plus mr-2"></i>New Request
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Leave Type</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dates</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Days</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Annual Leave</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 12 - Jun 15, 2023</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Approved</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Sick Leave</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jul 3 - Jul 5, 2023</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Personal Leave</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Aug 10 - Aug 11, 2023</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">Leave Balance</h2>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-700">Annual Leave</span>
+                            <span class="text-sm font-medium text-gray-700">18/20 days</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-700">Sick Leave</span>
+                            <span class="text-sm font-medium text-gray-700">5/10 days</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-600 h-2.5 rounded-full" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-700">Personal Leave</span>
+                            <span class="text-sm font-medium text-gray-700">3/5 days</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-purple-600 h-2.5 rounded-full" style="width: 60%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Upcoming Holidays</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-calendar-day text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">Independence Day</p>
+                                <p class="text-sm text-gray-500">July 4, 2023</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-calendar-day text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">Labor Day</p>
+                                <p class="text-sm text-gray-500">September 4, 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Leave Request Modal -->
+<div id="leaveRequestModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+        <div class="gradient-bg py-4 px-6 rounded-t-lg">
+            <h3 class="text-xl font-bold text-white">New Leave Request</h3>
+        </div>
+        <div class="p-6">
+            <form id="leaveRequestForm">
+                <div class="mb-4">
+                    <label for="leaveType" class="block text-gray-700 font-medium mb-2">Leave Type</label>
+                    <select id="leaveType" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        <option value="">Select leave type</option>
+                        <option value="annual">Annual Leave</option>
+                        <option value="sick">Sick Leave</option>
+                        <option value="personal">Personal Leave</option>
+                        <option value="maternity">Maternity/Paternity</option>
+                        <option value="bereavement">Bereavement Leave</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="startDate" class="block text-gray-700 font-medium mb-2">Start Date</label>
+                        <input type="date" id="startDate" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                    <div>
+                        <label for="endDate" class="block text-gray-700 font-medium mb-2">End Date</label>
+                        <input type="date" id="endDate" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="leaveReason" class="block text-gray-700 font-medium mb-2">Reason</label>
+                    <textarea id="leaveReason" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Briefly explain the reason for your leave"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hideLeaveRequestModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-all">
+                        Submit Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // User state
+    let currentUser = null;
+
+    // DOM elements
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const pages = document.querySelectorAll('.page');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in from localStorage
+        const user = localStorage.getItem('currentUser');
+        if (user) {
+            currentUser = JSON.parse(user);
+            updateUIForLoggedInUser();
+        }
+
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Form submissions
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        document.getElementById('registerForm').addEventListener('submit', handleRegister);
+        document.getElementById('leaveRequestForm').addEventListener('submit', handleLeaveRequest);
+
+        // Close mobile menu when clicking a link
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    });
+
+    // Show a specific page
+    function showPage(pageId) {
+        pages.forEach(page => {
+            if (page.id === pageId) {
+                page.classList.add('active');
+            } else {
+                page.classList.remove('active');
+            }
+        });
+    }
+
+    // Handle login
+    function handleLogin(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
+
+        // Simple validation
+        let isValid = true;
+
+        if (!email || !email.includes('@')) {
+            document.getElementById('loginEmail').classList.add('input-error');
+            document.getElementById('loginEmailError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('loginEmail').classList.remove('input-error');
+            document.getElementById('loginEmailError').classList.add('hidden');
+        }
+
+        if (!password || password.length < 6) {
+            document.getElementById('loginPassword').classList.add('input-error');
+            document.getElementById('loginPasswordError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('loginPassword').classList.remove('input-error');
+            document.getElementById('loginPasswordError').classList.add('hidden');
+        }
+
+        if (!isValid) return;
+
+        // In a real app, you would send this to a server for verification
+        // For demo purposes, we'll just simulate a successful login
+        currentUser = {
+            name: email.split('@')[0],
+            email: email,
+            role: 'employee' // Default role for demo
+        };
+
+        if (rememberMe) {
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        } else {
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+        }
+
+        updateUIForLoggedInUser();
+        showPage('dashboard');
+
+        // Update dashboard with user info
+        document.getElementById('dashboard-username').textContent = currentUser.name;
+    }
+
+    // Handle registration
+    function handleRegister(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('registerConfirmPassword').value;
+        const role = document.getElementById('registerRole').value;
+        const acceptTerms = document.getElementById('acceptTerms').checked;
+
+        // Validation
+        let isValid = true;
+
+        if (!name) {
+            document.getElementById('registerName').classList.add('input-error');
+            document.getElementById('registerNameError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerName').classList.remove('input-error');
+            document.getElementById('registerNameError').classList.add('hidden');
+        }
+
+        if (!email || !email.includes('@')) {
+            document.getElementById('registerEmail').classList.add('input-error');
+            document.getElementById('registerEmailError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerEmail').classList.remove('input-error');
+            document.getElementById('registerEmailError').classList.add('hidden');
+        }
+
+        if (!password || password.length < 6) {
+            document.getElementById('registerPassword').classList.add('input-error');
+            document.getElementById('registerPasswordError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerPassword').classList.remove('input-error');
+            document.getElementById('registerPasswordError').classList.add('hidden');
+        }
+
+        if (password !== confirmPassword) {
+            document.getElementById('registerConfirmPassword').classList.add('input-error');
+            document.getElementById('registerConfirmPasswordError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerConfirmPassword').classList.remove('input-error');
+            document.getElementById('registerConfirmPasswordError').classList.add('hidden');
+        }
+
+        if (!role) {
+            document.getElementById('registerRole').classList.add('input-error');
+            document.getElementById('registerRoleError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerRole').classList.remove('input-error');
+            document.getElementById('registerRoleError').classList.add('hidden');
+        }
+
+        if (!acceptTerms) {
+            alert('Please accept the terms and conditions');
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // In a real app, you would send this data to a server
+        // For demo purposes, we'll just simulate a successful registration
+        currentUser = {
+            name: name,
+            email: email,
+            role: role
+        };
+
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+        updateUIForLoggedInUser();
+        showPage('dashboard');
+
+        // Update dashboard with user info
+        document.getElementById('dashboard-username').textContent = currentUser.name;
+
+        // Show success message
+        alert('Registration successful! You are now logged in.');
+    }
+
+    // Handle leave request
+    function handleLeaveRequest(e) {
+        e.preventDefault();
+
+        const leaveType = document.getElementById('leaveType').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const reason = document.getElementById('leaveReason').value;
+
+        // Simple validation
+        if (!leaveType || !startDate || !endDate) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        // In a real app, you would send this to a server
+        console.log('Leave request submitted:', {
+            leaveType,
+            startDate,
+            endDate,
+            reason
+        });
+
+        // Show success message and close modal
+        alert('Your leave request has been submitted successfully!');
+        hideLeaveRequestModal();
+
+        // Reset form
+        document.getElementById('leaveRequestForm').reset();
+    }
+
+    // Logout function
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        sessionStorage.removeItem('currentUser');
+        updateUIForLoggedOutUser();
+        showPage('home');
+    }
+
+    // Update UI when user is logged in
+    function updateUIForLoggedInUser() {
+        // Show logout and dashboard links, hide login/register
+        document.getElementById('logout-nav').classList.remove('hidden');
+        document.getElementById('dashboard-nav').classList.remove('hidden');
+        document.getElementById('login-nav').classList.add('hidden');
+        document.getElementById('register-nav').classList.add('hidden');
+
+        // Mobile menu
+        document.getElementById('logout-nav-mobile').classList.remove('hidden');
+        document.getElementById('dashboard-nav-mobile').classList.remove('hidden');
+        document.getElementById('login-nav-mobile').classList.add('hidden');
+        document.getElementById('register-nav-mobile').classList.add('hidden');
+    }
+
+    // Update UI when user is logged out
+    function updateUIForLoggedOutUser() {
+        // Show login/register links, hide logout/dashboard
+        document.getElementById('logout-nav').classList.add('hidden');
+        document.getElementById('dashboard-nav').classList.add('hidden');
+        document.getElementById('login-nav').classList.remove('hidden');
+        document.getElementById('register-nav').classList.remove('hidden');
+
+        // Mobile menu
+        document.getElementById('logout-nav-mobile').classList.add('hidden');
+        document.getElementById('dashboard-nav-mobile').classList.add('hidden');
+        document.getElementById('login-nav-mobile').classList.remove('hidden');
+        document.getElementById('register-nav-mobile').classList.remove('hidden');
+    }
+
+    // Leave request modal functions
+    function showLeaveRequestModal() {
+        document.getElementById('leaveRequestModal').classList.remove('hidden');
+    }
+
+    function hideLeaveRequestModal() {
+        document.getElementById('leaveRequestModal').classList.add('hidden');
+    }
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .input-error {
+            border-color: #f87171;
+        }
+        .error-message {
+            color: #f87171;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 min-h-screen">
+<!-- Navigation -->
+<nav class="gradient-bg text-white shadow-lg">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <i class="fas fa-calendar-alt text-2xl"></i>
+            <span class="text-xl font-bold">LeaveTrack</span>
+        </div>
+        <div class="hidden md:flex space-x-6">
+            <a href="#" onclick="showPage('home')" class="nav-link hover:text-gray-200 transition-all">Home</a>
+            <a href="#" onclick="showPage('about')" class="nav-link hover:text-gray-200 transition-all">About</a>
+            <a href="#" onclick="showPage('login')" id="login-nav" class="nav-link hover:text-gray-200 transition-all">Login</a>
+            <a href="#" onclick="showPage('register')" id="register-nav" class="nav-link hover:text-gray-200 transition-all">Register</a>
+            <a href="#" onclick="logout()" id="logout-nav" class="nav-link hover:text-gray-200 transition-all hidden">Logout</a>
+            <a href="#" onclick="showPage('dashboard')" id="dashboard-nav" class="nav-link hover:text-gray-200 transition-all hidden">Dashboard</a>
+        </div>
+        <button class="md:hidden text-white focus:outline-none" id="mobile-menu-button">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
+    </div>
+    <!-- Mobile menu -->
+    <div class="md:hidden hidden bg-indigo-800" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="#" onclick="showPage('home')" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700">Home</a>
+            <a href="#" onclick="showPage('about')" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700">About</a>
+            <a href="#" onclick="showPage('login')" id="login-nav-mobile" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700">Login</a>
+            <a href="#" onclick="showPage('register')" id="register-nav-mobile" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700">Register</a>
+            <a href="#" onclick="logout()" id="logout-nav-mobile" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700 hidden">Logout</a>
+            <a href="#" onclick="showPage('dashboard')" id="dashboard-nav-mobile" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-indigo-700 hidden">Dashboard</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Home Page -->
+<div id="home" class="page active">
+    <div class="container mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Streamline Your Leave Management</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Efficiently manage employee leave requests, approvals, and tracking with our intuitive system.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all">
+                <div class="text-indigo-600 mb-4">
+                    <i class="fas fa-clock text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Time Tracking</h3>
+                <p class="text-gray-600">Easily track employee leave balances and usage in real-time.</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all">
+                <div class="text-indigo-600 mb-4">
+                    <i class="fas fa-check-circle text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Easy Approvals</h3>
+                <p class="text-gray-600">Streamline the approval process with automated workflows.</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all">
+                <div class="text-indigo-600 mb-4">
+                    <i class="fas fa-chart-pie text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Detailed Reports</h3>
+                <p class="text-gray-600">Generate comprehensive reports for better workforce planning.</p>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button onclick="showPage('register')" class="gradient-bg text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition-all shadow-lg">
+                Get Started Now
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Login Page -->
+<div id="login" class="page">
+    <div class="container mx-auto px-4 py-12 max-w-md">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="gradient-bg py-4 px-6">
+                <h2 class="text-2xl font-bold text-white">Login to Your Account</h2>
+            </div>
+            <div class="p-6">
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label for="loginEmail" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                        <input type="email" id="loginEmail" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="your@email.com" required>
+                        <div id="loginEmailError" class="error-message hidden">Please enter a valid email address</div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="loginPassword" class="block text-gray-700 font-medium mb-2">Password</label>
+                        <input type="password" id="loginPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="••••••••" required>
+                        <div id="loginPasswordError" class="error-message hidden">Password must be at least 6 characters</div>
+                    </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="rememberMe" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                        </div>
+                        <a href="#" class="text-sm text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-lg font-semibold hover:opacity-90 transition-all">
+                        Login
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600">Don't have an account? <a href="#" onclick="showPage('register')" class="text-indigo-600 hover:text-indigo-500 font-medium">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Register Page -->
+<div id="register" class="page">
+    <div class="container mx-auto px-4 py-12 max-w-md">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="gradient-bg py-4 px-6">
+                <h2 class="text-2xl font-bold text-white">Create Your Account</h2>
+            </div>
+            <div class="p-6">
+                <form id="registerForm">
+                    <div class="mb-4">
+                        <label for="registerName" class="block text-gray-700 font-medium mb-2">Full Name</label>
+                        <input type="text" id="registerName" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="John Doe" required>
+                        <div id="registerNameError" class="error-message hidden">Please enter your full name</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="registerEmail" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                        <input type="email" id="registerEmail" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="your@email.com" required>
+                        <div id="registerEmailError" class="error-message hidden">Please enter a valid email address</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="registerPassword" class="block text-gray-700 font-medium mb-2">Password</label>
+                        <input type="password" id="registerPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="••••••••" required>
+                        <div id="registerPasswordError" class="error-message hidden">Password must be at least 6 characters</div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="registerConfirmPassword" class="block text-gray-700 font-medium mb-2">Confirm Password</label>
+                        <input type="password" id="registerConfirmPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="••••••••" required>
+                        <div id="registerConfirmPasswordError" class="error-message hidden">Passwords do not match</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="registerRole" class="block text-gray-700 font-medium mb-2">Role</label>
+                        <select id="registerRole" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            <option value="">Select your role</option>
+                            <option value="employee">Employee</option>
+                            <option value="manager">Manager</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                        <div id="registerRoleError" class="error-message hidden">Please select your role</div>
+                    </div>
+                    <div class="flex items-center mb-6">
+                        <input type="checkbox" id="acceptTerms" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" required>
+                        <label for="acceptTerms" class="ml-2 block text-sm text-gray-700">I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms and Conditions</a></label>
+                    </div>
+                    <button type="submit" class="w-full gradient-bg text-white py-2 px-4 rounded-lg font-semibold hover:opacity-90 transition-all">
+                        Register
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600">Already have an account? <a href="#" onclick="showPage('login')" class="text-indigo-600 hover:text-indigo-500 font-medium">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About Page -->
+<div id="about" class="page">
+    <div class="container mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">About LeaveTrack</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Our mission is to simplify leave management for organizations of all sizes.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 mb-12">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Our Story</h2>
+                <p class="text-gray-600 mb-4">Founded in 2023, LeaveTrack was born out of a need to modernize the way companies handle employee leave management. We noticed that many organizations were still using outdated spreadsheets or paper-based systems, leading to inefficiencies and errors.</p>
+                <p class="text-gray-600">Our team of HR professionals and software developers came together to create a solution that would save time, reduce administrative burden, and provide better visibility into workforce planning.</p>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Team working" class="rounded-lg shadow-lg w-full h-auto">
+            </div>
+        </div>
+
+        <div class="bg-gray-100 rounded-lg p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Key Features</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="text-indigo-600 mb-3">
+                        <i class="fas fa-user-shield text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Role-Based Access</h3>
+                    <p class="text-gray-600">Different access levels for employees, managers, and administrators ensure proper control and security.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="text-indigo-600 mb-3">
+                        <i class="fas fa-bell text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Automated Notifications</h3>
+                    <p class="text-gray-600">Real-time alerts for leave requests, approvals, and reminders keep everyone informed.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="text-indigo-600 mb-3">
+                        <i class="fas fa-mobile-alt text-3xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Mobile Friendly</h3>
+                    <p class="text-gray-600">Access the system from any device, anywhere, making it convenient for both office and remote workers.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Ready to Get Started?</h2>
+            <button onclick="showPage('register')" class="gradient-bg text-white px-8 py-3 rounded-full font-semibold hover:opacity-90 transition-all shadow-lg">
+                Sign Up Now
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Page -->
+<div id="dashboard" class="page">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">Leave Management Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <div class="bg-white px-4 py-2 rounded-lg shadow-sm flex items-center">
+                    <i class="fas fa-user-circle text-indigo-600 mr-2"></i>
+                    <span id="dashboard-username" class="font-medium">John Doe</span>
+                </div>
+                <button onclick="logout()" class="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 transition-all">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 font-medium">Available Leave</p>
+                        <h3 class="text-2xl font-bold mt-1">18 <span class="text-sm font-normal text-gray-500">days</span></h3>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <i class="fas fa-check-circle text-green-600"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 font-medium">Pending Requests</p>
+                        <h3 class="text-2xl font-bold mt-1">2 <span class="text-sm font-normal text-gray-500">requests</span></h3>
+                    </div>
+                    <div class="bg-yellow-100 p-3 rounded-full">
+                        <i class="fas fa-clock text-yellow-600"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 font-medium">Approved Leave</p>
+                        <h3 class="text-2xl font-bold mt-1">7 <span class="text-sm font-normal text-gray-500">days</span></h3>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-calendar-check text-blue-600"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 font-medium">Rejected Requests</p>
+                        <h3 class="text-2xl font-bold mt-1">1 <span class="text-sm font-normal text-gray-500">request</span></h3>
+                    </div>
+                    <div class="bg-red-100 p-3 rounded-full">
+                        <i class="fas fa-times-circle text-red-600"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Request Leave</h2>
+                    <button onclick="showLeaveRequestModal()" class="gradient-bg text-white px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-all">
+                        <i class="fas fa-plus mr-2"></i>New Request
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Leave Type</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dates</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Days</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Annual Leave</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 12 - Jun 15, 2023</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Approved</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Sick Leave</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jul 3 - Jul 5, 2023</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Personal Leave</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Aug 10 - Aug 11, 2023</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">Leave Balance</h2>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-700">Annual Leave</span>
+                            <span class="text-sm font-medium text-gray-700">18/20 days</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-700">Sick Leave</span>
+                            <span class="text-sm font-medium text-gray-700">5/10 days</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-600 h-2.5 rounded-full" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-700">Personal Leave</span>
+                            <span class="text-sm font-medium text-gray-700">3/5 days</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-purple-600 h-2.5 rounded-full" style="width: 60%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Upcoming Holidays</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-calendar-day text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">Independence Day</p>
+                                <p class="text-sm text-gray-500">July 4, 2023</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-calendar-day text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">Labor Day</p>
+                                <p class="text-sm text-gray-500">September 4, 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Leave Request Modal -->
+<div id="leaveRequestModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+        <div class="gradient-bg py-4 px-6 rounded-t-lg">
+            <h3 class="text-xl font-bold text-white">New Leave Request</h3>
+        </div>
+        <div class="p-6">
+            <form id="leaveRequestForm">
+                <div class="mb-4">
+                    <label for="leaveType" class="block text-gray-700 font-medium mb-2">Leave Type</label>
+                    <select id="leaveType" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                        <option value="">Select leave type</option>
+                        <option value="annual">Annual Leave</option>
+                        <option value="sick">Sick Leave</option>
+                        <option value="personal">Personal Leave</option>
+                        <option value="maternity">Maternity/Paternity</option>
+                        <option value="bereavement">Bereavement Leave</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="startDate" class="block text-gray-700 font-medium mb-2">Start Date</label>
+                        <input type="date" id="startDate" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                    <div>
+                        <label for="endDate" class="block text-gray-700 font-medium mb-2">End Date</label>
+                        <input type="date" id="endDate" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="leaveReason" class="block text-gray-700 font-medium mb-2">Reason</label>
+                    <textarea id="leaveReason" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Briefly explain the reason for your leave"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="hideLeaveRequestModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-all">
+                        Submit Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // User state
+    let currentUser = null;
+
+    // DOM elements
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const pages = document.querySelectorAll('.page');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in from localStorage
+        const user = localStorage.getItem('currentUser');
+        if (user) {
+            currentUser = JSON.parse(user);
+            updateUIForLoggedInUser();
+        }
+
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Form submissions
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        document.getElementById('registerForm').addEventListener('submit', handleRegister);
+        document.getElementById('leaveRequestForm').addEventListener('submit', handleLeaveRequest);
+
+        // Close mobile menu when clicking a link
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    });
+
+    // Show a specific page
+    function showPage(pageId) {
+        pages.forEach(page => {
+            if (page.id === pageId) {
+                page.classList.add('active');
+            } else {
+                page.classList.remove('active');
+            }
+        });
+    }
+
+    // Handle login
+    function handleLogin(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
+
+        // Simple validation
+        let isValid = true;
+
+        if (!email || !email.includes('@')) {
+            document.getElementById('loginEmail').classList.add('input-error');
+            document.getElementById('loginEmailError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('loginEmail').classList.remove('input-error');
+            document.getElementById('loginEmailError').classList.add('hidden');
+        }
+
+        if (!password || password.length < 6) {
+            document.getElementById('loginPassword').classList.add('input-error');
+            document.getElementById('loginPasswordError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('loginPassword').classList.remove('input-error');
+            document.getElementById('loginPasswordError').classList.add('hidden');
+        }
+
+        if (!isValid) return;
+
+        // In a real app, you would send this to a server for verification
+        // For demo purposes, we'll just simulate a successful login
+        currentUser = {
+            name: email.split('@')[0],
+            email: email,
+            role: 'employee' // Default role for demo
+        };
+
+        if (rememberMe) {
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        } else {
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+        }
+
+        updateUIForLoggedInUser();
+        showPage('dashboard');
+
+        // Update dashboard with user info
+        document.getElementById('dashboard-username').textContent = currentUser.name;
+    }
+
+    // Handle registration
+    function handleRegister(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('registerConfirmPassword').value;
+        const role = document.getElementById('registerRole').value;
+        const acceptTerms = document.getElementById('acceptTerms').checked;
+
+        // Validation
+        let isValid = true;
+
+        if (!name) {
+            document.getElementById('registerName').classList.add('input-error');
+            document.getElementById('registerNameError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerName').classList.remove('input-error');
+            document.getElementById('registerNameError').classList.add('hidden');
+        }
+
+        if (!email || !email.includes('@')) {
+            document.getElementById('registerEmail').classList.add('input-error');
+            document.getElementById('registerEmailError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerEmail').classList.remove('input-error');
+            document.getElementById('registerEmailError').classList.add('hidden');
+        }
+
+        if (!password || password.length < 6) {
+            document.getElementById('registerPassword').classList.add('input-error');
+            document.getElementById('registerPasswordError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerPassword').classList.remove('input-error');
+            document.getElementById('registerPasswordError').classList.add('hidden');
+        }
+
+        if (password !== confirmPassword) {
+            document.getElementById('registerConfirmPassword').classList.add('input-error');
+            document.getElementById('registerConfirmPasswordError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerConfirmPassword').classList.remove('input-error');
+            document.getElementById('registerConfirmPasswordError').classList.add('hidden');
+        }
+
+        if (!role) {
+            document.getElementById('registerRole').classList.add('input-error');
+            document.getElementById('registerRoleError').classList.remove('hidden');
+            isValid = false;
+        } else {
+            document.getElementById('registerRole').classList.remove('input-error');
+            document.getElementById('registerRoleError').classList.add('hidden');
+        }
+
+        if (!acceptTerms) {
+            alert('Please accept the terms and conditions');
+            isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // In a real app, you would send this data to a server
+        // For demo purposes, we'll just simulate a successful registration
+        currentUser = {
+            name: name,
+            email: email,
+            role: role
+        };
+
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+        updateUIForLoggedInUser();
+        showPage('dashboard');
+
+        // Update dashboard with user info
+        document.getElementById('dashboard-username').textContent = currentUser.name;
+
+        // Show success message
+        alert('Registration successful! You are now logged in.');
+    }
+
+    // Handle leave request
+    function handleLeaveRequest(e) {
+        e.preventDefault();
+
+        const leaveType = document.getElementById('leaveType').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const reason = document.getElementById('leaveReason').value;
+
+        // Simple validation
+        if (!leaveType || !startDate || !endDate) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        // In a real app, you would send this to a server
+        console.log('Leave request submitted:', {
+            leaveType,
+            startDate,
+            endDate,
+            reason
+        });
+
+        // Show success message and close modal
+        alert('Your leave request has been submitted successfully!');
+        hideLeaveRequestModal();
+
+        // Reset form
+        document.getElementById('leaveRequestForm').reset();
+    }
+
+    // Logout function
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        sessionStorage.removeItem('currentUser');
+        updateUIForLoggedOutUser();
+        showPage('home');
+    }
+
+    // Update UI when user is logged in
+    function updateUIForLoggedInUser() {
+        // Show logout and dashboard links, hide login/register
+        document.getElementById('logout-nav').classList.remove('hidden');
+        document.getElementById('dashboard-nav').classList.remove('hidden');
+        document.getElementById('login-nav').classList.add('hidden');
+        document.getElementById('register-nav').classList.add('hidden');
+
+        // Mobile menu
+        document.getElementById('logout-nav-mobile').classList.remove('hidden');
+        document.getElementById('dashboard-nav-mobile').classList.remove('hidden');
+        document.getElementById('login-nav-mobile').classList.add('hidden');
+        document.getElementById('register-nav-mobile').classList.add('hidden');
+    }
+
+    // Update UI when user is logged out
+    function updateUIForLoggedOutUser() {
+        // Show login/register links, hide logout/dashboard
+        document.getElementById('logout-nav').classList.add('hidden');
+        document.getElementById('dashboard-nav').classList.add('hidden');
+        document.getElementById('login-nav').classList.remove('hidden');
+        document.getElementById('register-nav').classList.remove('hidden');
+
+        // Mobile menu
+        document.getElementById('logout-nav-mobile').classList.add('hidden');
+        document.getElementById('dashboard-nav-mobile').classList.add('hidden');
+        document.getElementById('login-nav-mobile').classList.remove('hidden');
+        document.getElementById('register-nav-mobile').classList.remove('hidden');
+    }
+
+    // Leave request modal functions
+    function showLeaveRequestModal() {
+        document.getElementById('leaveRequestModal').classList.remove('hidden');
+    }
+
+    function hideLeaveRequestModal() {
+        document.getElementById('leaveRequestModal').classList.add('hidden');
+    }
+</script>
+</body>
+</html>

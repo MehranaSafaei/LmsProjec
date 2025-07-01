@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 public class SmsService {
 
 
-    public void sendSms(String mobile, String message) {
-        System.out.println("Sending SMS to " + mobile + ": " + message);
+    public void sendSms(String number, String message) {
+        System.out.println("Sending SMS to " + number + ": " + message);
 
     }
 

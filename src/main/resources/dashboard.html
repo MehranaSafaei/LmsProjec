@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Management System Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#BA2FF',
+                        secondary: '#EEAFF',
+                        accent: '#5F6CAF',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --primary: #BA2FF;
+            --secondary: #EEAFF;
+        }
+
+        body {
+            background-color: black;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, black, #667eea);
+        }
+
+        .card-gradient {
+            background: linear-gradient(135deg,black, #667eea);
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            background-color: #667eea;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+<div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="sidebar w-64 text-white flex-shrink-0">
+        <div class="p-4 flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+                <i class="fas fa-calendar-alt text-purple-600 text-xl"></i>
+            </div>
+            <h1 class="text-xl font-bold">LeaveTrack</h1>
+        </div>
+
+        <nav class="mt-8">
+            <div class="px-4 py-2 text-sm font-medium text-white/80 uppercase tracking-wider">
+                Main Menu
+            </div>
+
+            <a href="#" class="flex items-center px-4 py-3 nav-item text-white bg-white/10">
+                <i class="fas fa-tachometer-alt mr-3"></i>
+                Dashboard
+            </a>
+
+            <a href="#" class="flex items-center px-4 py-3 nav-item text-white/80 hover:text-white">
+                <i class="fas fa-calendar-plus mr-3"></i>
+                Apply Leave
+            </a>
+
+            <a href="#" class="flex items-center px-4 py-3 nav-item text-white/80 hover:text-white">
+                <i class="fas fa-history mr-3"></i>
+                Leave History
+            </a>
+
+            <a href="#" class="flex items-center px-4 py-3 nav-item text-white/80 hover:text-white">
+                <i class="fas fa-users mr-3"></i>
+                Team Calendar
+            </a>
+
+            <a href="#" class="flex items-center px-4 py-3 nav-item text-white/80 hover:text-white">
+                <i class="fas fa-cog mr-3"></i>
+                Settings
+            </a>
+
+            <div class="px-4 py-2 text-sm font-medium text-white/80 uppercase tracking-wider mt-6">
+                Quick Actions
+            </div>
+
+            <a href="#" class="flex items-center px-4 py-3 nav-item text-white/80 hover:text-white">
+                <i class="fas fa-file-export mr-3"></i>
+                Export Data
+            </a>
+
+            <a href="#" class="flex items-center px-4 py-3 nav-item text-white/80 hover:text-white">
+                <i class="fas fa-question-circle mr-3"></i>
+                Help Center
+            </a>
+        </nav>
+
+        <div class="absolute bottom-0 left-0 right-0 p-4">
+            <div class="flex items-center space-x-3">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="w-10 h-10 rounded-full">
+                <div>
+                    <p class="text-white font-medium">Sarah Johnson</p>
+                    <p class="text-white/60 text-sm">HR Manager</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-auto">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="px-6 py-4 flex items-center justify-between">
+                <h2 class="text-2xl font-semibold text-gray-800">Dashboard</h2>
+
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-200">
+                    </div>
+
+                    <div class="relative">
+                        <i class="fas fa-bell text-gray-500 text-xl cursor-pointer"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </div>
+
+                    <div class="w-px h-8 bg-gray-200"></div>
+
+                    <div class="flex items-center space-x-2">
+                        <span class="text-gray-700 font-medium">Sarah J.</span>
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="w-8 h-8 rounded-full">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="p-6">
+            <!-- Welcome Banner -->
+            <div class="card-gradient rounded-xl p-6 text-white mb-6 animate-fade-in">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-2">Welcome back, Sarah!</h3>
+                        <p class="opacity-90">You have 2 pending leave requests to review. Your next scheduled leave starts in 12 days.</p>
+                    </div>
+                    <button class="bg-white text-purple-600 px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition">
+                        Quick Actions
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="bg-white rounded-xl shadow-sm p-6 animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500">Available Balance</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1">18 Days</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                            <i class="fas fa-calendar-check text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between text-sm text-gray-500 mb-1">
+                            <span>Annual Leave</span>
+                            <span>12/20 days</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="progress-bar h-2 rounded-full" style="width: 60%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500">Pending Approval</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1">5 Requests</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                            <i class="fas fa-clock text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between text-sm text-gray-500 mb-1">
+                            <span>This Month</span>
+                            <span>+2 from last</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: 40%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500">Team On Leave</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1">3 Members</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                            <i class="fas fa-umbrella-beach text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between text-sm text-gray-500 mb-1">
+                            <span>Currently</span>
+                            <span>View All</span>
+                        </div>
+                        <div class="flex space-x-2 mt-2">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full border-2 border-white shadow">
+                            <img src="https://randomuser.me/api/portraits/women/12.jpg" alt="User" class="w-8 h-8 rounded-full border-2 border-white shadow">
+                            <img src="https://randomuser.me/api/portraits/men/55.jpg" alt="User" class="w-8 h-8 rounded-full border-2 border-white shadow">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 animate-fade-in" style="animation-delay: 0.4s;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500">Upcoming Holidays</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1">2 Events</h3>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+                            <i class="fas fa-glass-cheers text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                                    <span class="text-purple-600 text-sm font-medium">15</span>
+                                </div>
+                                <span class="text-gray-700">Independence Day</span>
+                            </div>
+                            <span class="text-sm text-gray-500">Mon</span>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                    <span class="text-blue-600 text-sm font-medium">25</span>
+                                </div>
+                                <span class="text-gray-700">Christmas</span>
+                            </div>
+                            <span class="text-sm text-gray-500">Wed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Leave Calendar -->
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-sm p-6 animate-fade-in" style="animation-delay: 0.5s;">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Leave Calendar</h3>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-sm border border-gray-300 rounded-lg">Month</button>
+                            <button class="px-3 py-1 text-sm bg-purple-600 text-white rounded-lg">Week</button>
+                            <button class="px-3 py-1 text-sm border border-gray-300 rounded-lg">Day</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-7 gap-1 mb-2">
+                        <div class="text-center text-sm font-medium text-gray-500 py-2">Sun</div>
+                        <div class="text-center text-sm font-medium text-gray-500 py-2">Mon</div>
+                        <div class="text-center text-sm font-medium text-gray-500 py-2">Tue</div>
+                        <div class="text-center text-sm font-medium text-gray-500 py-2">Wed</div>
+                        <div class="text-center text-sm font-medium text-gray-500 py-2">Thu</div>
+                        <div class="text-center text-sm font-medium text-gray-500 py-2">Fri</div>
+                        <div class="text-center text-sm font-medium text-gray-500 py-2">Sat</div>
+                    </div>
+
+                    <div class="grid grid-cols-7 gap-1">
+                        <!-- Previous month days -->
+                        <div class="h-20 p-1 text-right text-gray-400">29</div>
+                        <div class="h-20 p-1 text-right text-gray-400">30</div>
+                        <div class="h-20 p-1 text-right text-gray-400">31</div>
+
+                        <!-- Current month days -->
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">1</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">2</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">3</div>
+                            <div class="text-xs bg-purple-100 text-purple-800 rounded px-1 mt-1 truncate">Team Outing</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">4</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">5</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded bg-purple-50">
+                            <div class="text-right">6</div>
+                            <div class="text-xs bg-purple-200 text-purple-800 rounded px-1 mt-1 truncate">Your Leave</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded bg-purple-50">
+                            <div class="text-right">7</div>
+                            <div class="text-xs bg-purple-200 text-purple-800 rounded px-1 mt-1 truncate">Your Leave</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">8</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">9</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">10</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">11</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">12</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">13</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">14</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded bg-blue-50">
+                            <div class="text-right">15</div>
+                            <div class="text-xs bg-blue-200 text-blue-800 rounded px-1 mt-1 truncate">Holiday</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">16</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">17</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">18</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">19</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">20</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">21</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">22</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">23</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">24</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded bg-blue-50">
+                            <div class="text-right">25</div>
+                            <div class="text-xs bg-blue-200 text-blue-800 rounded px-1 mt-1 truncate">Holiday</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">26</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">27</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">28</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">29</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">30</div>
+                        </div>
+                        <div class="h-20 p-1 border rounded">
+                            <div class="text-right">31</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Approvals -->
+                <div class="bg-white rounded-xl shadow-sm p-6 animate-fade-in" style="animation-delay: 0.6s;">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Pending Approvals</h3>
+                        <span class="text-sm text-purple-600 font-medium">5 Requests</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start p-3 border border-gray-100 rounded-lg hover:bg-gray-50">
+                            <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="User" class="w-10 h-10 rounded-full mr-3">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="font-medium text-gray-800">Michael Scott</h4>
+                                    <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Annual</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Jun 10 - Jun 15 (5 days)</p>
+                                <div class="flex space-x-2 mt-2">
+                                    <button class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded hover:bg-green-200">Approve</button>
+                                    <button class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200">Reject</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-3 border border-gray-100 rounded-lg hover:bg-gray-50">
+                            <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="User" class="w-10 h-10 rounded-full mr-3">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="font-medium text-gray-800">Pam Beesly</h4>
+                                    <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Sick</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Jun 5 - Jun 7 (3 days)</p>
+                                <div class="flex space-x-2 mt-2">
+                                    <button class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded hover:bg-green-200">Approve</button>
+                                    <button class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200">Reject</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start p-3 border border-gray-100 rounded-lg hover:bg-gray-50">
+                            <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="User" class="w-10 h-10 rounded-full mr-3">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="font-medium text-gray-800">Jim Halpert</h4>
+                                    <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">Personal</span>
+                                </div>
+                                <p class="text-sm text-gray-500">Jun 18 - Jun 20 (3 days)</p>
+                                <div class="flex space-x-2 mt-2">
+                                    <button class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded hover:bg-green-200">Approve</button>
+                                    <button class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded hover:bg-red-200">Reject</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center pt-2">
+                            <button class="text-sm text-purple-600 font-medium hover:text-purple-800">View All Requests</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="mt-6 bg-white rounded-xl shadow-sm p-6 animate-fade-in" style="animation-delay: 0.7s;">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800">Recent Activity</h3>
+                    <button class="text-sm text-purple-600 font-medium hover:text-purple-800">See All</button>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-check text-purple-600"></i>
+                        </div>
+                        <div class="flex-1 border-b border-gray-100 pb-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-medium text-gray-800">Leave Approved</h4>
+                                <span class="text-xs text-gray-500">2 hours ago</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">Your leave request for June 10-12 has been approved by HR.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user-plus text-blue-600"></i>
+                        </div>
+                        <div class="flex-1 border-b border-gray-100 pb-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-medium text-gray-800">New Request</h4>
+                                <span class="text-xs text-gray-500">5 hours ago</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">Michael Scott submitted a leave request for June 15-18.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-calendar-alt text-green-600"></i>
+                        </div>
+                        <div class="flex-1 border-b border-gray-100 pb-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-medium text-gray-800">Holiday Added</h4>
+                                <span class="text-xs text-gray-500">1 day ago</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">Company holiday on July 4th has been added to the calendar.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-exclamation text-yellow-600"></i>
+                        </div>
+                        <div class="flex-1 pb-4">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-medium text-gray-800">Policy Update</h4>
+                                <span class="text-xs text-gray-500">2 days ago</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">Annual leave policy has been updated. Please review the changes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Simple animation trigger for demo purposes
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.animate-fade-in');
+
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            }, 50);
+        });
+    });
+</script>
+</body>
+</html>

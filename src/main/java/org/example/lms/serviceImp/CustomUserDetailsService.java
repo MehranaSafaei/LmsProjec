@@ -29,5 +29,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                         .collect(Collectors.toSet())
         );
     }
+
+    public String alaki(){
+        return "alaki";
+    }
 }
 
